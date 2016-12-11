@@ -1,0 +1,14 @@
+{
+  "name": "js-aruco",
+  "homepage": "https://github.com/jcmellado/js-aruco",
+  "_release": "fb1c43c27b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "fb1c43c27ba124567588e051298d31fcdc31cf7c"
+  },
+  "_source": "https://github.com/jcmellado/js-aruco.git",
+  "_target": "*",
+  "_originalSource": "js-aruco",
+  "_direct": true
+}
