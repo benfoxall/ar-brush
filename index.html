@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ar-brush</title>
+    <style media="screen">
+      video, canvas {width: 100%; position: absolute;left:0;top:0}
+    </style>
+  </head>
+  <body>
+    <video autoplay></video>
+    <script src="bower_components/js-aruco/src/cv.js"></script>
+    <script src="bower_components/js-aruco/src/aruco.js"></script>
+    <script src="bower_components/js-aruco/src/posit2.js"></script>
+    <script type="text/javascript">
+
+      var detector = new AR.Detector()
+
+      var video = document.querySelector('video'), ctx, canvas
+
+      navigator.mediaDevices
+        .getUserMedia({video:true})
+        .then(stream => {
+          video.srcObject = stream
+          video.onloadedmetadata = e => {
+            canvas = document.createElement('canvas')
+            document.body.appendChild(canvas)
+            canvas.width = video.clientWidth
+            canvas.height = video.clientHeight
+            ctx = canvas.getContext('2d')
+            tick()
+          }
+
+        })
+
+
+      function tick() {
+        requestAnimationFrame(tick)
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+
+
+        var markers = detector.detect(imageData);
+
+        ctx.fillStyle = 'rgba(255,0,150,0.8)'
+        markers.forEach(m => {
+          ctx.beginPath()
+          m.corners.forEach(c => {
+            ctx.lineTo(c.x, c.y)
+          })
+          ctx.fill()
+        })
+
+      }
+    </script>
+  </body>
+</html>
