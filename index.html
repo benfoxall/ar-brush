@@ -19,7 +19,7 @@
       var video = document.querySelector('video'), ctx, canvas
 
       navigator.mediaDevices
-        .getUserMedia({video:true})
+        .getUserMedia({video:{ facingMode: { exact: "environment" } }})
         .then(stream => {
           video.srcObject = stream
           video.onloadedmetadata = e => {
