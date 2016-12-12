@@ -4,7 +4,12 @@
     <meta charset="utf-8">
     <title>ar-brush</title>
     <style media="screen">
-      video, canvas {width: 100%; position: absolute;left:0;top:0}
+      /*video, canvas {width: 100%; position: absolute;left:0;top:0}*/
+      video {
+        transform-origin: 0 0;
+        transform: scale(0.25);
+        position: absolute;left:0;top:0
+      }
     </style>
   </head>
   <body>
@@ -18,8 +23,20 @@
 
       var video = document.querySelector('video'), ctx, canvas
 
-      navigator.mediaDevices
-        .getUserMedia({video:{ facingMode: { exact: "environment" } }})
+
+      navigator.mediaDevices.enumerateDevices()
+        .then(devices =>
+          devices.filter(device =>
+            device.kind == 'videoinput'))
+        .then(cameras => {
+          console.log("cameras: ", cameras)
+
+          // Hack: the back one seems to be last
+          var last = cameras[cameras.length-1]
+
+          return navigator.mediaDevices
+            .getUserMedia({video: {deviceId: {exact: last.deviceId} }})
+        })
         .then(stream => {
           video.srcObject = stream
           video.onloadedmetadata = e => {
