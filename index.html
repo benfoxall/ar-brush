@@ -15,18 +15,38 @@
         font-size: 15vmin;
         font-family: monospace;
       }
+      #debug_el {
+        font-size: 20vmin;
+        width: 20vmin;
+        height: 20vmin;
+        line-height: 20vmin;
+        background: rgba(0,150,255,0.6);
+        text-align: center;
+        position: absolute;
+        top:50%;
+        left:50%;
+        margin-top:-10vmin;
+        margin-left:-10vmin;
+      }
     </style>
   </head>
   <body>
     <video autoplay></video>
 
+    <div id="debug_el">A</div>
+
     <button id="start_button" onclick="start()">start</button>
     <script src="bower_components/js-aruco/src/cv.js"></script>
     <script src="bower_components/js-aruco/src/aruco.js"></script>
-    <script src="bower_components/js-aruco/src/posit2.js"></script>
+    <script src="bower_components/js-aruco/src/svd.js"></script>
+    <script src="bower_components/js-aruco/src/posit1.js"></script>
     <script type="text/javascript">
 
       var detector = new AR.Detector()
+
+                  // 35mm 640px
+      var posit = new POS.Posit(35, 640)
+
 
       var video = document.querySelector('video'), ctx, canvas
 
@@ -84,9 +104,51 @@
           ctx.fill()
         })
 
+        if(markers[0]) {
+
+          var pose = posit.pose(markers[0].corners)
+          console.log("pose", pose)
+
+          debug(pose.bestRotation)
+
+        }
+
         // bestRotation
 
       }
+
+
+
+      function debug(m) {
+
+        var t = [
+          m[0][0], m[0][1], m[0][2], 0,
+          m[1][0], m[1][1], m[1][2], 0,
+          m[2][0], m[2][1], m[2][2], 0,
+          0,       0,       0,       1
+        ]
+
+        debug_el.style.transform = `matrix3d(${t.join(', ')})`
+      }
+
+
+      debug([
+        [
+          0.05594822354925362,
+          0.6727566155326683,
+          -0.7377454388464306
+        ],
+        [
+          0.37248925679420863,
+          -0.6996196586203925,
+          -0.6097409998062977
+        ],
+        [
+          -0.9263485034556818,
+          -0.24068832445491606,
+          -0.289737088783097
+        ]
+      ])
     </script>
   </body>
 </html>
