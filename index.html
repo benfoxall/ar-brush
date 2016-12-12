@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>ar-brush</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style media="screen">
       /*video, canvas {width: 100%; position: absolute;left:0;top:0}*/
       video {
@@ -10,10 +11,16 @@
         transform: scale(0.25);
         position: absolute;left:0;top:0
       }
+      #start_button {
+        font-size: 15vmin;
+        font-family: monospace;
+      }
     </style>
   </head>
   <body>
     <video autoplay></video>
+
+    <button id="start_button" onclick="start()">start</button>
     <script src="bower_components/js-aruco/src/cv.js"></script>
     <script src="bower_components/js-aruco/src/aruco.js"></script>
     <script src="bower_components/js-aruco/src/posit2.js"></script>
@@ -22,6 +29,11 @@
       var detector = new AR.Detector()
 
       var video = document.querySelector('video'), ctx, canvas
+
+
+    function start(){
+
+      start_button.remove()
 
 
       navigator.mediaDevices.enumerateDevices()
@@ -51,6 +63,8 @@
         })
 
 
+    }
+
       function tick() {
         requestAnimationFrame(tick)
 
@@ -69,6 +83,8 @@
           })
           ctx.fill()
         })
+
+        // bestRotation
 
       }
     </script>
