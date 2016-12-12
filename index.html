@@ -8,8 +8,8 @@
       /*video, canvas {width: 100%; position: absolute;left:0;top:0}*/
       video {
         transform-origin: 0 0;
-        transform: scale(0.25);
-        position: absolute;left:0;top:0
+        transform: scale(1);
+        position: absolute;left:0;top:0;
       }
       #start_button {
         font-size: 15vmin;
@@ -40,7 +40,14 @@
     <script src="bower_components/js-aruco/src/aruco.js"></script>
     <script src="bower_components/js-aruco/src/svd.js"></script>
     <script src="bower_components/js-aruco/src/posit1.js"></script>
+
+    <script src="bower_components/stats.js/build/stats.js"></script>
     <script type="text/javascript">
+
+      var stats = new Stats()
+  stats.showPanel( 0 ) // 0: fps, 1: ms, 2: mb, 3+: custom
+  document.body.appendChild( stats.dom )
+
 
       var detector = new AR.Detector()
 
@@ -74,8 +81,8 @@
           video.onloadedmetadata = e => {
             canvas = document.createElement('canvas')
             document.body.appendChild(canvas)
-            canvas.width = video.clientWidth
-            canvas.height = video.clientHeight
+            canvas.width = video.clientWidth / 2
+            canvas.height = video.clientHeight / 2
             ctx = canvas.getContext('2d')
             tick()
           }
@@ -86,7 +93,10 @@
     }
 
       function tick() {
-        requestAnimationFrame(tick)
+
+
+
+        stats.begin()
 
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
         var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -112,6 +122,10 @@
           debug(pose.bestRotation)
 
         }
+
+        stats.end()
+
+        requestAnimationFrame(tick)
 
         // bestRotation
 
